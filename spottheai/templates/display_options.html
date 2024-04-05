@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose an Answer</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='options.css') }}">
+</head>
+<body>
+    
+        <h2>Round {{ round }}: Choose the AI response</h2>
+        <form id="responseForm" onsubmit="submitChoice(event)">
+            {% for option in options %}
+            <div class="response-option">
+                <input type="radio" id="response{{ loop.index }}" name="response" value="{{ option.player_id }}">
+                <label for="response{{ loop.index }}">{{ option.text }}</label>
+            </div>
+            {% endfor %}
+            <input type="hidden" id="gameCode" value="{{ game_code }}" />
+            <div class="button-container">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+
+</body>
+<script>
+    // This function will be called when the form is submitted
+    function submitChoice(event) {
+        event.preventDefault();
+        const gameCode = document.getElementById('gameCode').value;
+        const selectedResponse = document.querySelector('input[name="response"]:checked').value;
+        console.log('Selected response:', selectedResponse);
+
+        fetch(`/submit_choice/${gameCode}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ response: selectedResponse })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                if (selectedResponse === 'ai') {
+                    alert("Correct! You've identified the AI response.");
+                } else {
+                    alert("Not quite! Try again next round.");
+                }
+                // Redirect to the play game page for the next round
+                window.location.href = `/play_game/${gameCode}`;
+            } else {
+                console.error('Failed to submit choice:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting choice:', error);
+        });
+    }
+
+
+</script>
+</html>

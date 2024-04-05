@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spot the AI</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SPOT THE AI!</h1>
+        </header>
+        <div class="main-content">
+            <div class="form-stack">
+                <input type="text" id="username" placeholder="Enter your name" required>
+                
+                <input type="text" id="gameCode" placeholder="Enter game code">
+                <button onclick="joinGame()">JOIN A GAME</button>
+                
+                <button onclick="hostGame()">HOST A GAME</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

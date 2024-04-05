@@ -1,0 +1,70 @@
+<!-- game_lobby.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Game Lobby</h1>
+            <p>Your game code: <strong id="gameCodeDisplay">{{ game_code }}</strong></p>
+            {% if host %}
+                <button onclick="startGame()">Start Game</button>
+            {% else %}
+                <p>Waiting for host to start game...</p>
+            {% endif %}
+        </header>
+    </div>
+
+    <script>
+        // Function to start the game, to be implemented by the host
+        function startGame() {
+            const gameCode = document.getElementById('gameCodeDisplay').textContent;
+            fetch(`/start_game/${gameCode}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data); // For debugging purposes
+                if (data.success) {
+                    // The game status has been set to 'in_progress' on the server.
+                    // The polling function will now redirect all players to the game page.
+                    // Optionally, you could also manually redirect the host:
+                    window.location.href = `/play_game/${gameCode}`;
+                }
+            })
+            .catch(error => {
+                console.error('Error starting the game:', error);
+            });
+        }
+        function pollGameStatus() {
+        const gameCode = document.getElementById('gameCodeDisplay').textContent;
+        fetch(`/game_status/${gameCode}`)
+            .then(response => response.json())
+            .then(data => {
+                if(data.game_status === 'in_progress') {
+                    window.location.href = `/play_game/${gameCode}`; // Redirect to the game page
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Call pollGameStatus every 5 seconds
+        setInterval(pollGameStatus, 5000);
+        
+        
+    </script>
+    
+</body>
+</html>

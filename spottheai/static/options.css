@@ -1,0 +1,54 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #7dbbe6;
+    margin: 40px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+h2{
+    font-size: 2em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    align-items: center;
+    /*center align h2 text*/ 
+    text-align: center;
+
+}
+
+.response-option {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* adjust as needed for spacing */
+    padding: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.response-option:hover {
+    background-color: #b3d9ff; /* lighter shade of blue on hover */
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+label {
+    font-size: 1.2em;
+    color: #004080; /* dark blue color for the text */
+    cursor: pointer;
+}
+
+/* Center the submit button */
+button {
+    background-color: #005288;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5em;
+    transition: background-color 0.3s ease;
+    padding: 10px 20px;
+    margin: 20px auto; /* centers the button */
+    display: block; /* necessary for margin: auto to center horizontally */
+}

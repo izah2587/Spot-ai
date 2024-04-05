@@ -1,0 +1,96 @@
+<!-- play_game.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='game_play.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+           <h2>{{ prompt }}</h2> 
+        </header>
+        <div>
+            <h2>Round: {{ round }}</h2>
+            <form onsubmit="submitResponse(); return false;">
+                <textarea id="playerResponse"></textarea> <!-- add space so submit is centered below text box -->
+                <br>
+                <button id="submitButton" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const gameCode = '{{ game_code }}';
+         var checkInterval = setInterval(() => checkRoundComplete(gameCode), 1000);
+        function submitResponse() {
+            const response = document.getElementById('playerResponse').value;
+            // Use 'fetch' to send the response to the Flask server
+            fetch(`/submit_response/${gameCode}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ response: response })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    console.log('Response submitted successfully');
+                    // Here you can handle post-submission behavior, such as disabling the textbox
+                    document.getElementById('playerResponse').disabled = true;
+                    // and submit button, and informing the user that the response has been submitted
+                    document.getElementById('submitButton').disabled = true;
+                    // initiate polling to check if the round is complete
+                    var checkInterval = setInterval(() => checkRoundComplete(gameCode), 1000);
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting response:', error);
+            });
+        }
+
+        // function displayResponses(gameCode) {
+        //     fetch(`/get_responses/${gameCode}`)
+        //         .then(response => response.json())
+        //         .then(responses => {
+        //             // Assuming you have a div with the id 'responseList' to display the responses
+        //             var responseList = document.getElementById('responseList');
+        //             responses.forEach(response => {
+        //                 var listItem = document.createElement('li');
+        //                 listItem.textContent = response.text;
+        //                 // Implement selection logic, e.g., radio buttons
+        //                 // ...
+        //                 responseList.appendChild(listItem);
+        //             });
+        //         })
+        //         .catch(error => console.error('Error:', error));
+        // }
+
+        function checkRoundComplete(gameCode) {
+            fetch(`/check_round_complete/${gameCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.round_complete) {
+                        // Stop the interval that checks for round completion
+                        clearInterval(checkInterval);
+                        // Redirect all players to the display options page
+                        window.location.href = `/display_options/${gameCode}`;
+
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Initiate the polling interval
+       
+        
+
+    </script>
+</body>
+</html>

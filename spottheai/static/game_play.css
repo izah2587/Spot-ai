@@ -1,0 +1,61 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #7dbbe6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: #004080; /* Dark blue color for the text */
+}
+
+.container {
+    width: 80%;
+    max-width: 800px; /* Maximum width of the container */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    margin: 20px;
+}
+
+h2 {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#playerResponse {
+    width: 100%; /* Full width of the container */
+    height: 150px; /* Larger text box */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    margin-bottom: 20px; /* Space before the submit button */
+}
+
+button {
+    background-color: #005288;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 10px 20px;
+    display: block;
+    width: 100%; /* Full width of the container */
+    box-sizing: border-box; /* Includes padding in the width */
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #003c66; /* Darker blue on hover */
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
